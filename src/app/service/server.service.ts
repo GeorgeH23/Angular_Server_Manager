@@ -13,10 +13,6 @@ export class ServerService {
 
   constructor(private http: HttpClient) { }
 
-  // getServers(): Observable<CustomResponse> {
-  //   return this.http.get<CustomResponse>('http://localhost:8080/server/list');
-  // }
-
   servers$ = <Observable<CustomResponse>>
   this.http.get<CustomResponse>(`${this.apiUrl}/server/list`)
   .pipe(
@@ -36,6 +32,22 @@ export class ServerService {
   .pipe(
     tap(console.log),
     catchError(this.handleError)
+  );
+
+  filter$ = (status: Status, response: CustomResponse) => <Observable<CustomResponse>>
+  new Observable<CustomResponse>(
+    subscriber => {
+      console.log(response);
+      subscriber.next(
+        status === Status.ALL ? {...response, message: `Servers filtered by ${status} status`} : 
+          {
+            ...response, message: response.data.serverList.filter(server => server.status === status).length > 0 ? 
+            `Servers filtered by ${status === Status.SERVER_UP ? 'SERVER UP' : 'SERVER DOWN'} status` : `No servers of ${status} found`,
+            data: {serverList: response.data.serverList.filter(server => server.status === status)}
+          }
+      );
+      subscriber.complete();
+    }
   );
 
   delete$ = (serverId: number) => <Observable<CustomResponse>>
