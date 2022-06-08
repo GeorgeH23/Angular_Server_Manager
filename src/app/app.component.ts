@@ -13,6 +13,7 @@ import { DataState } from './enum/data-state.enum';
 export class AppComponent implements OnInit {
 
   appState$: Observable<AppState<CustomResponse>>;
+  readonly DataState = DataState;
 
   constructor(private serverService: ServerService) { }
 
