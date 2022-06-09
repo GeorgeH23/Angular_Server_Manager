@@ -41,9 +41,9 @@ export class ServerService {
         subscriber.next(
           status === Status.ALL ? { ...response, message: `Servers filtered by ${status} status` } :
             {
-              ...response, message: response.data.serverList.filter(server => server.status === status).length > 0 ?
+              ...response, message: response.data.servers.serverList.filter(server => server.status === status).length > 0 ?
                 `Servers filtered by ${status === Status.SERVER_UP ? 'SERVER UP' : 'SERVER DOWN'} status` : `No servers of ${status} found`,
-              data: { serverList: response.data.serverList.filter(server => server.status === status) }
+              data: { servers: { serverList: response.data.servers.serverList.filter(server => server.status === status) } }
             }
         );
         subscriber.complete();

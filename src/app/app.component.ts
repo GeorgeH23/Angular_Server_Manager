@@ -4,6 +4,7 @@ import { AppState } from './interface/app-state';
 import { ServerService } from './service/server.service';
 import { CustomResponse } from './interface/custom-response';
 import { DataState } from './enum/data-state.enum';
+import { Status } from './enum/status.enum';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent implements OnInit {
 
   appState$: Observable<AppState<CustomResponse>>;
   readonly DataState = DataState;
+  readonly Status = Status;
 
   constructor(private serverService: ServerService) { }
 
