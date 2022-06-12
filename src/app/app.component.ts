@@ -27,11 +27,11 @@ export class AppComponent implements OnInit {
       .pipe(
         map(response => {
           this.dataSubject.next(response);
-          return { dataState: DataState.LOADED_STATE, appData: response }
+          return { dataState: DataState.LOADED_STATE, appData: response };
         }),
         startWith({ dataState: DataState.LOADING_STATE }),
         catchError((error: string) => {
-          return of({ dataState: DataState.ERROR_STATE, error })
+          return of({ dataState: DataState.ERROR_STATE, error });
         })
       );
   }
@@ -46,12 +46,25 @@ export class AppComponent implements OnInit {
               server.id === response.data.server.id)
           ] = response.data.server;
           this.filterSubject.next('');
-          return { dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }
+          return { dataState: DataState.LOADED_STATE, appData: this.dataSubject.value };
         }),
         startWith({ dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }),
         catchError((error: string) => {
           this.filterSubject.next('');
-          return of({ dataState: DataState.ERROR_STATE, error })
+          return of({ dataState: DataState.ERROR_STATE, error });
+        })
+      );
+  }
+
+  filterServers(status: Status): void {
+    this.appState$ = this.serverService.filter$(status, this.dataSubject.value)
+      .pipe(
+        map(response => {
+          return { dataState: DataState.LOADED_STATE, appData: response };
+        }),
+        startWith({ dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }),
+        catchError((error: string) => {
+          return of({ dataState: DataState.ERROR_STATE, error });
         })
       );
   }
